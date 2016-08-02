@@ -5,15 +5,16 @@ import re
 import http.client as httplib
 from time import sleep
 
-base_url = "https://www.whoscored.com"
-start_url = base_url + "/Regions/252/Tournaments/2/Seasons/5826/Stages/12496/PlayerStatistics/England-Premier-League-2015-2016"
-player_statistic_url = base_url + "/StatisticsFeed/1/GetPlayerStatistics"
-incap_cookie_name = "incap_ses_324_774904"
-visit_cookie_name = "visid_incap_774904"
+base_url = 'https://www.whoscored.com'
+start_url = base_url + '/Regions/252/Tournaments/2/Seasons/5826/Stages/12496/PlayerStatistics/England-Premier-League-2015-2016'
+player_statistic_url = base_url + '/StatisticsFeed/1/GetPlayerStatistics'
+incap_cookie_name = 'incap_ses_324_774904'
+visid_cookie_name = 'visid_incap_774904'
+last_mode_header_name = 'Model-Last-Mode'
 
-ses_pattern = re.compile('.*incap_ses_324_774904=([^;]*).*$')
-visit_pattern = re.compile('.*visid_incap_774904=([^;]*).*$')
-model_id_pattern = re.compile("'Model-Last-Mode': '(.*)' }")
+ses_pattern = re.compile('.*' + incap_cookie_name + '=([^;]*).*$')
+visit_pattern = re.compile('.*' + visid_cookie_name + '=([^;]*).*$')
+model_id_pattern = re.compile("'" + last_mode_header_name + "': '(.*)' }")
 
 httplib.HTTPConnection.debuglevel = 1
 logging.basicConfig()
@@ -22,6 +23,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
+numberOfPlayersToPick = 298
 timeout_sec = 2
 x_cookie = ""
 with open('cookie.txt', encoding='utf-8') as cookie_file:
@@ -51,7 +53,7 @@ params = {
 	"isMinApp": "true",
 	"page": "",
 	"includeZeroValues": "",
-	"numberOfPlayersToPick": 298
+	"numberOfPlayersToPick": numberOfPlayersToPick
 }
 auth_headers = {
 	"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
