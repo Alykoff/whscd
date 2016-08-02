@@ -3,6 +3,7 @@ import requests
 import logging
 import re
 import http.client as httplib
+import csv
 from time import sleep
 
 base_url = 'https://www.whoscored.com'
@@ -23,7 +24,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-numberOfPlayersToPick = 298
+numberOfPlayersToPick = 10
 timeout_sec = 2
 x_cookie = ""
 with open('cookie.txt', encoding='utf-8') as cookie_file:
@@ -77,18 +78,19 @@ headers = {
 	"cache-control": "no-cache",
 	"upgrade-insecure-requests": "1",
 	"authority": "www.whoscored.com",
-	"referer": "https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/5826/Stages/12496/PlayerStatistics/England-Premier-League-2015-2016"
+	"referer": "https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/5826/Stages/12496/PlayerStatistics/England-Premier-League-2015-2016",
+	"cookie": x_cookie
 }
 auth_request = requests.get(
 	start_url,
 	headers=auth_headers,
 	timeout=timeout_sec
 )
-sleep(1)
-model_id = model_id_pattern.search(auth_request.text).group(1)
 
+sleep(1)
+
+model_id = model_id_pattern.search(auth_request.text).group(1)
 r_headers = headers.copy()
-r_headers['cookie'] = auth_headers['cookie']
 r_headers['model-last-mode'] = model_id
 
 r = requests.get(
@@ -98,7 +100,88 @@ r = requests.get(
 	timeout=timeout_sec
 )
 rjson = r.json()
+print('\n=====')
 print(rjson)
+with open('out/england_premier.csv', 'w+') as england_premier_file:
+	england_premier_csv = csv.writer(england_premier_file)
+	england_premier_csv.writerow([
+		'teamId',
+		'playedPositionsShort',
+		'apps',
+		'positionText',
+		'isActive',
+		'passSuccess',
+		'rating',
+		'isOpta',
+		'yellowCard',
+		'seasonName',
+		'subOn',
+		'ranking',
+		'seasonId',
+		'playedPositions',
+		'isManOfTheMatch',
+		'tournamentName',
+		'tournamentRegionId',
+		'age',
+		'tournamentRegionCode',
+		'firstName',
+		'goal',
+		'minsPlayed',
+		'redCard',
+		'height',
+		'lastName',
+		'name',
+		'regionCode',
+		'weight',
+		'manOfTheMatch',
+		'tournamentId',
+		'shotsPerGame',
+		'aerialWonPerGame',
+		'tournamentShortName',
+		'assistTotal',
+		'teamName',
+		'playerId'
+	])
+	for x in rjson['playerTableStats']:
+		england_premier_csv.writerow([
+			x['teamId'],
+			x['playedPositionsShort'],
+			x['apps'],
+			x['positionText'],
+			x['isActive'],
+			x['passSuccess'],
+			x['rating'],
+			x['isOpta'],
+			x['yellowCard'],
+			x['seasonName'],
+			x['subOn'],
+			x['ranking'],
+			x['seasonId'],
+			x['playedPositions'],
+			x['isManOfTheMatch'],
+			x['tournamentName'],
+			x['tournamentRegionId'],
+			x['age'],
+			x['tournamentRegionCode'],
+			x['firstName'],
+			x['goal'],
+			x['minsPlayed'],
+			x['redCard'],
+			x['height'],
+			x['lastName'],
+			x['name'],
+			x['regionCode'],
+			x['weight'],
+			x['manOfTheMatch'],
+			x['tournamentId'],
+			x['shotsPerGame'],
+			x['aerialWonPerGame'],
+			x['tournamentShortName'],
+			x['assistTotal'],
+			x['teamName'],
+			x['playerId']
+		])
+
 
 
 
