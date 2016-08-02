@@ -24,7 +24,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-numberOfPlayersToPick = 10
+numberOfPlayersToPick = 298
 timeout_sec = 2
 x_cookie = ""
 with open('cookie.txt', encoding='utf-8') as cookie_file:
@@ -100,8 +100,6 @@ r = requests.get(
 	timeout=timeout_sec
 )
 rjson = r.json()
-print('\n=====')
-print(rjson)
 with open('out/england_premier.csv', 'w+') as england_premier_file:
 	england_premier_csv = csv.writer(england_premier_file)
 	england_premier_csv.writerow([
