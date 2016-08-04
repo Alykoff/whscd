@@ -59,7 +59,7 @@ def index():
 def parse():
     check_cook()
     cookie = request.query['cookie']
-    res = get_england_json(base64.b64decode(cookie))
+    res = get_england_json(base64.b64decode(cookie).strip())
     print("ress")
     print(res)
     return res
