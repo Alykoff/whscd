@@ -52,12 +52,12 @@ def login_post():
 @view('index')
 def index():
     print(ppp)
-    #check_cook()
+    check_cook()
     return dict()
 
 @get('/parse')
 def parse():
-    #check_cook()
+    check_cook()
     cookie = request.query['cookie']
     res = get_england_json(base64.b64decode(cookie))
     print("ress")
