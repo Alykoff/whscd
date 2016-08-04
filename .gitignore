@@ -2,4 +2,5 @@ cookie.txt
 *.swp
 *.pyc
 *.img
+src/auth.py
 out/england_premier.csv
